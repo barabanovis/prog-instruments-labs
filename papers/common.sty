@@ -1,0 +1,176 @@
+\NeedsTeXFormat{LaTeX2e}
+\ProvidesPackage{common}[2024/01/01 Common STO style]
+
+% ============================================================
+% 1. КОДИРОВКИ И ЯЗЫК
+% ============================================================
+\usepackage[T2A]{fontenc}
+\usepackage[utf8]{inputenc}
+\usepackage[russian]{babel}
+
+% ============================================================
+% 2. ГЕОМЕТРИЯ СТРАНИЦЫ (п. 3.2 СТО: 30/15/20/20 мм)
+% ============================================================
+\usepackage{geometry}
+\geometry{left=30mm,right=15mm,top=20mm,bottom=20mm}
+
+% ============================================================
+% 3. ИНТЕРВАЛ, ОТСТУП, ВЫРАВНИВАНИЕ (п. 3.2 СТО)
+% ============================================================
+\usepackage{setspace}
+\onehalfspacing
+
+\usepackage{indentfirst}
+\setlength{\parindent}{1.25cm}
+\setlength{\parskip}{0pt}
+
+% ============================================================
+% 4. ШРИФТ 14 pt (п. 3.2 СТО: кегль 12–14)
+% ============================================================
+\makeatletter
+\renewcommand\normalsize{%
+  \@setfontsize\normalsize{14pt}{21pt}%
+  \abovedisplayskip 14\p@ \@plus3\p@ \@minus7\p@
+  \abovedisplayshortskip \z@ \@plus3\p@
+  \belowdisplayshortskip 7\p@ \@plus3\p@ \@minus4\p@
+  \belowdisplayskip \abovedisplayskip
+  \let\@listi\@listI}
+\normalsize
+\makeatother
+
+% ============================================================
+% 5. МАТЕМАТИКА, ТЕОРЕМЫ
+% ============================================================
+\usepackage{amsmath,amssymb,amsthm}
+
+\newtheorem{theorem}{Теорема}
+\newtheorem{lemma}{Лемма}
+\newtheorem{corollary}{Следствие}
+\newtheorem{definition}{Определение}
+\newtheorem{statement}{Утверждение}
+
+% ============================================================
+% 6. ГРАФИКА И ПОДПИСИ (п. 6.1–6.2 СТО)
+% ============================================================
+\usepackage{graphicx}
+\usepackage{float}
+\usepackage{caption}
+\captionsetup{
+  font=normalsize,
+  labelfont=normalfont,
+  labelsep=endash,
+  justification=centering,
+  singlelinecheck=false,
+  skip=6pt
+}
+
+% ============================================================
+% 7. ТАБЛИЦЫ
+% ============================================================
+\usepackage{array}
+\usepackage{booktabs}
+\usepackage{longtable}
+
+% ============================================================
+% 8. ПЕРЕЧИСЛЕНИЯ (п. 4.1.10 СТО)
+% ============================================================
+\usepackage{enumitem}
+\setlist[itemize]{leftmargin=1.25cm, itemsep=0pt, topsep=0pt, parsep=0pt}
+\setlist[enumerate]{leftmargin=1.25cm, itemsep=0pt, topsep=0pt, parsep=0pt}
+
+% ============================================================
+% 9. ЛИСТИНГИ + ПОДДЕРЖКА КИРИЛЛИЦЫ (UTF-8)
+% ============================================================
+\usepackage{listings}
+\usepackage{xcolor}
+
+\lstset{
+  basicstyle=\ttfamily\footnotesize,
+  keywordstyle=\color{black},
+  commentstyle=\color{black}\itshape,
+  stringstyle=\color{black},
+  numbers=left,
+  numberstyle=\tiny,
+  frame=single,
+  breaklines=true,
+  showstringspaces=false,
+  tabsize=2,
+  columns=fullflexible,
+  keepspaces=true,
+  extendedchars=true,
+  inputencoding=utf8,
+  literate=
+    {а}{{\cyrchar\cyra}}1 {б}{{\cyrchar\cyrb}}1 {в}{{\cyrchar\cyrv}}1
+    {г}{{\cyrchar\cyrg}}1 {д}{{\cyrchar\cyrd}}1 {е}{{\cyrchar\cyre}}1
+    {ё}{{\cyrchar\cyryo}}1 {ж}{{\cyrchar\cyrzh}}1 {з}{{\cyrchar\cyrz}}1
+    {и}{{\cyrchar\cyri}}1 {й}{{\cyrchar\cyrishrt}}1 {к}{{\cyrchar\cyrk}}1
+    {л}{{\cyrchar\cyrl}}1 {м}{{\cyrchar\cyrm}}1 {н}{{\cyrchar\cyrn}}1
+    {о}{{\cyrchar\cyro}}1 {п}{{\cyrchar\cyrp}}1 {р}{{\cyrchar\cyrr}}1
+    {с}{{\cyrchar\cyrs}}1 {т}{{\cyrchar\cyrt}}1 {у}{{\cyrchar\cyru}}1
+    {ф}{{\cyrchar\cyrf}}1 {х}{{\cyrchar\cyrh}}1 {ц}{{\cyrchar\cyrc}}1
+    {ч}{{\cyrchar\cyrch}}1 {ш}{{\cyrchar\cyrsh}}1 {щ}{{\cyrchar\cyrshch}}1
+    {ъ}{{\cyrchar\cyrhrdsn}}1 {ы}{{\cyrchar\cyrery}}1 {ь}{{\cyrchar\cyrsftsn}}1
+    {э}{{\cyrchar\cyrerev}}1 {ю}{{\cyrchar\cyryu}}1 {я}{{\cyrchar\cyrya}}1
+    {А}{{\cyrchar\CYRA}}1 {Б}{{\cyrchar\CYRB}}1 {В}{{\cyrchar\CYRV}}1
+    {Г}{{\cyrchar\CYRG}}1 {Д}{{\cyrchar\CYRD}}1 {Е}{{\cyrchar\CYRE}}1
+    {Ё}{{\cyrchar\CYRYO}}1 {Ж}{{\cyrchar\CYRZH}}1 {З}{{\cyrchar\CYRZ}}1
+    {И}{{\cyrchar\CYRI}}1 {Й}{{\cyrchar\CYRISHRT}}1 {К}{{\cyrchar\CYRK}}1
+    {Л}{{\cyrchar\CYRL}}1 {М}{{\cyrchar\CYRM}}1 {Н}{{\cyrchar\CYRN}}1
+    {О}{{\cyrchar\CYRO}}1 {П}{{\cyrchar\CYRP}}1 {Р}{{\cyrchar\CYRR}}1
+    {С}{{\cyrchar\CYRS}}1 {Т}{{\cyrchar\CYRT}}1 {У}{{\cyrchar\CYRU}}1
+    {Ф}{{\cyrchar\CYRF}}1 {Х}{{\cyrchar\CYRH}}1 {Ц}{{\cyrchar\CYRC}}1
+    {Ч}{{\cyrchar\CYRCH}}1 {Ш}{{\cyrchar\CYRSH}}1 {Щ}{{\cyrchar\CYRSHCH}}1
+    {Ъ}{{\cyrchar\CYRHRDSN}}1 {Ы}{{\cyrchar\CYRERY}}1 {Ь}{{\cyrchar\CYRSFTSN}}1
+    {Э}{{\cyrchar\CYREREV}}1 {Ю}{{\cyrchar\CYRYU}}1 {Я}{{\cyrchar\CYRYA}}1
+}
+
+% ============================================================
+% 10. ЗАГОЛОВКИ (п. 4.1.2, 4.1.4–4.1.7 СТО)
+% ============================================================
+\usepackage{titlesec}
+
+% Раздел: с новой страницы, по центру, прописными, без точки, без полужирного
+\titleformat{\section}[block]
+  {\normalfont\centering}
+  {\thesection.}{0.5em}{\MakeUppercase}
+\titlespacing*{\section}{0pt}{0pt}{12pt}
+
+% Подраздел: с прописной, без точки
+\titleformat{\subsection}[block]
+  {\normalfont}
+  {\thesubsection.}{0.5em}{}
+\titlespacing*{\subsection}{0pt}{12pt}{6pt}
+
+% Пункт: с прописной, без точки
+\titleformat{\subsubsection}[block]
+  {\normalfont}
+  {\thesubsubsection.}{0.5em}{}
+\titlespacing*{\subsubsection}{0pt}{12pt}{6pt}
+
+% Структурные элементы (РЕФЕРАТ, СОДЕРЖАНИЕ, ВВЕДЕНИЕ, ...):
+% с новой страницы, по центру, прописными, без точки.
+\newcommand{\structtitle}[1]{%
+  \clearpage
+  \begin{center}
+    \MakeUppercase{#1}
+  \end{center}
+  \par\vspace{6pt}%
+}
+
+% ============================================================
+% 11. НУМЕРАЦИЯ СТРАНИЦ (п. 4.2.1–4.2.2 СТО)
+% ============================================================
+\usepackage{fancyhdr}
+\pagestyle{fancy}
+\fancyhf{}
+\fancyfoot[C]{\thepage}
+\renewcommand{\headrulewidth}{0pt}
+
+% ============================================================
+% 12. ССЫЛКИ (hyperref — последним!)
+% ============================================================
+\usepackage{needspace}
+\usepackage{hyperref}
+\hypersetup{hidelinks}
+
+\endinput

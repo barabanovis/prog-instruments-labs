@@ -1,0 +1,443 @@
+\documentclass[14pt,a4paper]{article}
+
+% --- Подключение общего стиля из родительской папки ---
+\makeatletter
+\def\input@path{{../}}
+\makeatother
+\usepackage{common}
+
+% --- Папка для картинок этого документа ---
+\graphicspath{{fig/}}
+
+\begin{document}
+
+% ===================== ТИТУЛЬНЫЙ ЛИСТ =====================
+\begin{titlepage}
+\begin{center}
+МИНИСТЕРСТВО НАУКИ И ВЫСШЕГО ОБРАЗОВАНИЯ РОССИЙСКОЙ ФЕДЕРАЦИИ\\
+ФЕДЕРАЛЬНОЕ ГОСУДАРСТВЕННОЕ АВТОНОМНОЕ ОБРАЗОВАТЕЛЬНОЕ УЧРЕЖДЕНИЕ\\
+ВЫСШЕГО ОБРАЗОВАНИЯ\\
+«САМАРСКИЙ НАЦИОНАЛЬНЫЙ ИССЛЕДОВАТЕЛЬСКИЙ УНИВЕРСИТЕТ\\
+ИМЕНИ АКАДЕМИКА С. П. КОРОЛЕВА»\\
+(Самарский университет)\\[12pt]
+Кафедра \underline{\hspace{6cm}}
+\end{center}
+
+\vfill
+
+\begin{center}
+ПОЯСНИТЕЛЬНАЯ ЗАПИСКА\\
+к курсовому проекту по дисциплине\\
+«Технологии программирования»\\[12pt]
+\textbf{Интерпретатор BASIC-подобного языка}\\
+Вариант 3-2-1-A
+\end{center}
+
+\vfill
+
+\begin{flushright}
+\begin{tabular}{l}
+Студент группы \underline{\hspace{2.5cm}} \\
+\underline{\hspace{5cm}} \\
+Руководитель \underline{\hspace{2.5cm}} \\
+\underline{\hspace{5cm}} \\
+Оценка \underline{\hspace{3cm}} \\
+Дата \underline{\hspace{3cm}}
+\end{tabular}
+\end{flushright}
+
+\vfill
+
+\begin{center}
+Самара 2024
+\end{center}
+\end{titlepage}
+
+% ===================== ЗАДАНИЕ =====================
+\structtitle{Задание}
+
+% ФОТО: скан/фото выданного задания.
+% Положите файл в zapiska/fig/zadanie.png и раскомментируйте:
+% \begin{figure}[H]
+%   \centering
+%   \includegraphics[width=0.9\textwidth]{zadanie.png}
+% \end{figure}
+
+\begin{figure}[H]
+  \centering
+  \fbox{\parbox[c][9cm][c]{0.85\textwidth}{\centering
+    \textbf{[МЕСТО ДЛЯ ФОТО]}\\[4pt]
+    Скан выданного задания на курсовой проект}}
+\end{figure}
+
+% ===================== РЕФЕРАТ =====================
+\structtitle{Реферат}
+
+Пояснительная записка содержит \underline{\hspace{1cm}}~с., \underline{\hspace{1cm}}~рис.,
+\underline{\hspace{1cm}}~табл., \underline{\hspace{1cm}}~источников, \underline{\hspace{1cm}}~прил.
+
+\vspace{6pt}
+КЛЮЧЕВЫЕ СЛОВА: ИНТЕРПРЕТАТОР, BASIC-ПОДОБНЫЙ ЯЗЫК, ЛЕКСИЧЕСКИЙ
+АНАЛИЗАТОР, КОНЕЧНЫЙ АВТОМАТ, СИНТАКСИЧЕСКИЙ АНАЛИЗАТОР,
+РЕКУРСИВНЫЙ СПУСК, ПОЛИЗ, СТЕКОВАЯ МАШИНА, ХЕШ-ТАБЛИЦА,
+МЕТОД ЦЕПОЧЕК, СТРОГАЯ ТИПИЗАЦИЯ, ОТЛАДЧИК.
+
+\vspace{6pt}
+Объект разработки — интерпретатор упрощённого императивного
+языка программирования с BASIC-подобным синтаксисом (вариант 3-2-1-A:
+цикл с постусловием, хеш-таблица с разрешением коллизий методом
+цепочек, строгая типизация).
+
+Цель работы — разработка интерпретатора с возможностью
+редактирования и отладки программ, обеспечивающего лексический
+и синтаксический анализ, построение внутренней формы представления
+программы в виде ПОЛИЗа, выполнение программы на стековой машине,
+а также просмотр текущей инструкции, стека и значений переменных.
+
+В результате работы реализованы: лексический анализатор на основе
+конечного автомата; синтаксический анализатор методом рекурсивного
+спуска с семантическими процедурами генерации ПОЛИЗа; таблица
+идентификаторов в виде хеш-таблицы с цепочками; стековая машина;
+отладчик с пошаговым выполнением и точками останова; графический
+интерфейс.
+
+Область применения — учебные курсы по технологиям программирования,
+теории компиляторов и языкам программирования.
+
+% ===================== СОДЕРЖАНИЕ =====================
+\structtitle{Содержание}
+
+\tableofcontents
+
+% ===================== ВВЕДЕНИЕ =====================
+\structtitle{Введение}
+
+В соответствии с заданием на курсовой проект требуется разработать
+интерпретатор упрощённого императивного языка с возможностью
+редактирования и отладки программ. Вариант задания — 3-2-1-A:
+BASIC-подобный синтаксис; оператор цикла с постусловием; таблица
+идентификаторов на основе хеш-таблицы с разрешением коллизий
+методом цепочек; строгая типизация.
+
+Актуальность работы определяется тем, что построение интерпретатора
+позволяет на практике освоить все этапы трансляции: лексический
+анализ, синтаксический анализ, генерацию внутреннего представления
+и его выполнение. Эти этапы лежат в основе современных компиляторов
+и интерпретаторов, а также инструментов статического анализа.
+
+Цель работы — разработка интерпретатора, удовлетворяющего
+требованиям задания на оценку «5»: поддержка функций, оператора
+множественного выбора, безусловного перехода, графического
+интерфейса, пошагового выполнения, точек останова, редактирования
+переменных и синхронизации ПОЛИЗа с исходным текстом.
+
+Для достижения цели решаются следующие задачи:
+\begin{itemize}
+  \item формально описать язык (ключевые слова, лексика, грамматика,
+        правила типизации);
+  \item спроектировать архитектуру интерпретатора;
+  \item реализовать лексический анализатор на основе конечного
+        автомата;
+  \item реализовать синтаксический анализатор методом рекурсивного
+        спуска с семантическими процедурами генерации ПОЛИЗа;
+  \item реализовать таблицу идентификаторов в виде хеш-таблицы
+        с цепочками;
+  \item реализовать стековую машину для выполнения ПОЛИЗа;
+  \item реализовать отладчик и графический интерфейс;
+  \item провести тестирование.
+\end{itemize}
+
+% ===================== 1 ФОРМАЛЬНОЕ ОПИСАНИЕ ЯЗЫКА =====================
+\section{Формальное описание языка}
+
+\subsection{Ключевые слова}
+
+Язык поддерживает следующие ключевые слова (регистр не важен):
+DIM, AS, INTEGER, REAL, STRING, IF, THEN, ELSE, ENDIF, DO, LOOP,
+WHILE, UNTIL, FOR, TO, STEP, NEXT, SELECT, CASE, ENDSELECT, GOTO,
+RETURN, FUNCTION, ENDFUNCTION, CALL, PRINT, INPUT, AND, OR, NOT.
+
+\subsection{Лексика}
+
+Лексические единицы языка:
+\begin{itemize}
+  \item идентификатор: \verb|[A-Za-z_][A-Za-z0-9_]*|;
+  \item целая константа: \verb|[0-9]+|;
+  \item вещественная константа: \verb|[0-9]+\.[0-9]+|;
+  \item строковая константа: \verb|"..."| (экранирование \verb|""|);
+  \item комментарий: \verb|'| до конца строки;
+  \item операторы: \verb|+ - * / > < >= <= = <>|;
+  \item разделители: \verb|( ) , :|, конец строки.
+\end{itemize}
+
+\subsection{Грамматика}
+
+Грамматика языка в форме Бэкуса~---~Наура:
+\begin{verbatim}
+program        = { function | statement } EOF ;
+function       = "FUNCTION" ident "(" [ param { "," param } ] ")"
+                 { statement } "ENDFUNCTION" ;
+param          = ident "AS" type ;
+statement      = var_decl | assignment | print_stmt | input_stmt
+               | if_stmt | do_stmt | for_stmt | select_stmt
+               | goto_stmt | return_stmt | call_stmt | label ;
+var_decl       = "DIM" ident "AS" type { "," ident "AS" type } ;
+type           = "INTEGER" | "REAL" | "STRING" ;
+assignment     = ident ":=" expression ;
+print_stmt     = "PRINT" [ expression { "," expression } ] ;
+input_stmt     = "INPUT" ident { "," ident } ;
+if_stmt        = "IF" expression "THEN" { statement }
+                 [ "ELSE" { statement } ] "ENDIF" ;
+do_stmt        = "DO" { statement } "LOOP" ( "WHILE" | "UNTIL" ) expression ;
+for_stmt       = "FOR" ident "=" expression "TO" expression
+                 [ "STEP" expression ] { statement } "NEXT" ;
+select_stmt    = "SELECT" "CASE" expression
+                 { "CASE" case_label { "," case_label } ":" { statement } }
+                 [ "CASE" "ELSE" ":" { statement } ] "ENDSELECT" ;
+case_label     = const | const "TO" const ;
+goto_stmt      = "GOTO" ident ;
+return_stmt    = "RETURN" [ expression ] ;
+call_stmt      = "CALL" ident "(" [ expression { "," expression } ] ")" ;
+label          = ident ":" ;
+expression     = logic_or ;
+logic_or       = logic_and { "OR" logic_and } ;
+logic_and      = logic_not { "AND" logic_not } ;
+logic_not      = [ "NOT" ] comparison ;
+comparison     = additive [ ( ">" | "<" | ">=" | "<=" | "=" | "<>" ) additive ] ;
+additive       = multiplicative { ( "+" | "-" ) multiplicative } ;
+multiplicative = unary { ( "*" | "/" ) unary } ;
+unary          = [ "-" ] primary ;
+primary        = const | ident | call_expr | "(" expression ")" ;
+call_expr      = ident "(" [ expression { "," expression } ] ")" ;
+\end{verbatim}
+
+\subsection{Строгая типизация}
+
+Правила типизации:
+\begin{itemize}
+  \item преобразование INTEGER $\to$ REAL разрешено (расширяющее);
+  \item преобразование REAL $\to$ INTEGER запрещено;
+  \item STRING не участвует в арифметических операциях;
+  \item в числовую переменную нельзя присвоить STRING и наоборот.
+\end{itemize}
+
+% ===================== 2 АРХИТЕКТУРА =====================
+\section{Архитектура}
+
+Модули проекта:
+\begin{itemize}
+  \item \texttt{tokens.py} — типы токенов;
+  \item \texttt{lexer.py} — лексический анализатор (конечный автомат);
+  \item \texttt{parser.py} — синтаксический анализатор (рекурсивный
+        спуск) с семантическими процедурами генерации ПОЛИЗа;
+  \item \texttt{poliz.py} — операции ПОЛИЗа, дизассемблер;
+  \item \texttt{symbol\_table.py} — хеш-таблица с цепочками;
+  \item \texttt{interpreter.py} — стековая машина;
+  \item \texttt{debugger.py} — отладчик;
+  \item \texttt{main.py} — графический интерфейс (Tkinter).
+\end{itemize}
+
+% ФОТО: схема архитектуры. Положите в zapiska/fig/arch.png
+\begin{figure}[H]
+  \centering
+  \fbox{\parbox[c][6cm][c]{0.8\textwidth}{\centering
+    \textbf{[МЕСТО ДЛЯ ФОТО]}\\[4pt]
+    Схема архитектуры: Lexer $\to$ Parser $\to$ POLIZ $\to$ Interpreter\\
+    с ответвлениями в SymbolTable и Debugger}}
+  \caption{Архитектура интерпретатора}
+  \label{fig:arch}
+\end{figure}
+
+% ===================== 3 РЕАЛИЗАЦИЯ =====================
+\section{Реализация}
+
+\subsection{Лексический анализатор}
+
+Лексический анализатор реализован как детерминированный конечный
+автомат с состояниями Start, Ident, Int, Real, String, Op, Comment.
+Переходы определяются текущим символом; для идентификаторов после
+накопления имени выполняется поиск в таблице ключевых слов (регистр
+не важен). Ошибки (незакрытая строка, недопустимый символ)
+сопровождаются позицией <<строка:столбец>>.
+
+\subsection{Синтаксический анализатор}
+
+Синтаксический анализатор построен методом рекурсивного спуска.
+Каждое правило грамматики соответствует функции; в процессе разбора
+вызываются семантические процедуры, генерирующие фрагменты ПОЛИЗа.
+Ошибки синтаксиса и семантики (необъявленная переменная,
+несовпадение типов) выдаются с указанием места.
+
+\subsection{Таблица идентификаторов}
+
+Класс \texttt{SymbolTable} реализует хеш-таблицу с разрешением
+коллизий методом цепочек. Хеш-функция — djb2:
+\begin{equation}
+h(s) = \Bigl(\bigl((5381 \cdot 33) + s_0\bigr)\cdot 33 + s_1\Bigr)\cdots \bmod m,
+\end{equation}
+где $m = 211$ — простое число. Коллизии разрешаются списками
+в каждой ячейке. Средняя сложность поиска — $O(1+\alpha)$, где
+$\alpha = n/m$ — коэффициент заполнения.
+
+\subsection{ПОЛИЗ и стековая машина}
+
+Базовый набор операций: JMP, JZ, SET, ADD, SUB, AND, OR, CMPE, CMPL.
+Расширения: MUL, DIV, CMPG, CMPLE, CMPGE, CMPNE, NOT, IN, OUT, OUTSTR,
+CALL, RET, PUSH\_CONST, PUSH\_VAR, POP\_VAR. Интерпретатор хранит стек
+значений, счётчик команд и таблицу идентификаторов; поддерживает
+пошаговое выполнение и точки останова.
+
+\subsection{Отладчик}
+
+Реализованы пошаговое выполнение, точки останова, просмотр текущей
+инструкции ПОЛИЗа, стека и переменных, редактирование значений
+переменных, синхронизация: каждая инструкция ПОЛИЗа хранит ссылку
+на (line, col) исходного текста.
+
+% ФОТО: главное окно GUI. Положите в zapiska/fig/gui_main.png
+\begin{figure}[H]
+  \centering
+  \fbox{\parbox[c][8cm][c]{0.9\textwidth}{\centering
+    \textbf{[МЕСТО ДЛЯ ФОТО]}\\[4pt]
+    Главное окно интерпретатора}}
+  \caption{Главное окно программы}
+  \label{fig:gui}
+\end{figure}
+
+% ФОТО: точка останова. Положите в zapiska/fig/breakpoint.png
+\begin{figure}[H]
+  \centering
+  \fbox{\parbox[c][7cm][c]{0.9\textwidth}{\centering
+    \textbf{[МЕСТО ДЛЯ ФОТО]}\\[4pt]
+    Остановка на точке останова}}
+  \caption{Точка останова и синхронизация с исходным текстом}
+  \label{fig:breakpoint}
+\end{figure}
+
+% ===================== 4 ТЕСТИРОВАНИЕ =====================
+\section{Тестирование}
+
+Набор тест-кейсов приведён в таблице~\ref{tab:tests}.
+
+\begin{table}[H]
+\caption{Набор тест-кейсов}
+\label{tab:tests}
+\centering
+\begin{tabular}{@{}clp{7cm}@{}}
+\toprule
+№ & Вход & Ожидаемый результат \\
+\midrule
+1 & \texttt{DIM x AS INTEGER; x := 5; PRINT x} & вывод \texttt{5} \\
+2 & \texttt{x := 1.5} при \texttt{x AS INTEGER} & ошибка типизации с позицией \\
+3 & \texttt{DIM s AS STRING; s := "hi"; PRINT s} & вывод \texttt{hi} \\
+4 & \texttt{DO ... LOOP WHILE i < 3} & тело цикла выполняется $\ge 1$ раза \\
+5 & деление на ноль & ошибка выполнения \\
+6 & \texttt{GOTO undefined} & ошибка парсера \\
+7 & незакрытая строка \texttt{"abc} & ошибка лексера \\
+8 & \texttt{IF ... THEN ... ELSE ... ENDIF} & корректное ветвление \\
+9 & \texttt{SELECT CASE} с диапазоном \texttt{1 TO 5} & корректный выбор ветви \\
+10 & \texttt{FUNCTION f(x AS INTEGER) ... ENDFUNCTION} & корректный вызов и возврат \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+% ФОТО: сообщение об ошибке. Положите в zapiska/fig/error.png
+\begin{figure}[H]
+  \centering
+  \fbox{\parbox[c][6cm][c]{0.85\textwidth}{\centering
+    \textbf{[МЕСТО ДЛЯ ФОТО]}\\[4pt]
+    Сообщение об ошибке с указанием позиции}}
+  \caption{Диагностика ошибки}
+  \label{fig:error}
+\end{figure}
+
+% ===================== ЗАКЛЮЧЕНИЕ =====================
+\structtitle{Заключение}
+
+В ходе работы разработан интерпретатор BASIC-подобного языка
+(вариант 3-2-1-A) со строгой типизацией, циклом с постусловием,
+таблицей идентификаторов на хеш-таблице с цепочками. Реализованы
+лексер на конечном автомате, рекурсивный спуск с генерацией ПОЛИЗа,
+стековая машина, отладчик и графический интерфейс. Проект
+соответствует требованиям на оценку «5».
+
+Возможные расширения: дополнительные типы данных (вектор, список,
+ассоциативный массив), вынос стековой машины в отдельный процесс,
+защита от копирования.
+
+% ===================== СПИСОК ИСПОЛЬЗОВАННЫХ ИСТОЧНИКОВ =====================
+\structtitle{Список использованных источников}
+
+\begin{enumerate}
+  \item Ахо А., Лам М., Сети Р., Ульман Дж. Компиляторы: принципы,
+        технологии и инструменты. — М.: Вильямс, 2008. — 1184 с.
+  \item Вирт Н. Построение компиляторов. — М.: ДМК Пресс, 2010. — 192 с.
+  \item Свердлов С. З. Языки программирования и методы трансляции. —
+        СПб.: Питер, 2007. — 638 с.
+\end{enumerate}
+
+% ===================== ПРИЛОЖЕНИЯ =====================
+\structtitle{Приложение А}
+
+\begin{center}
+Листинги ключевых модулей
+\end{center}
+
+\subsection*{А.1 Модуль lexer.py}
+\begin{lstlisting}[language=Python]
+class Lexer:
+    def tokenize(self):
+        while self.pos < len(self.src):
+            ch = self._peek()
+            if ch in ' \t\r': self._advance(); continue
+            if ch == "'": self._comment(); continue
+            if ch == '\n': self._eol(); continue
+            if ch.isalpha() or ch == '_': self._ident(); continue
+            if ch.isdigit(): self._number(); continue
+            if ch == '"': self._string(); continue
+            self._operator()
+        self.tokens.append(Token(TokenType.EOF, None, self.line, self.col))
+        return self.tokens
+\end{lstlisting}
+
+\subsection*{А.2 Модуль symbol\_table.py}
+\begin{lstlisting}[language=Python]
+class SymbolTable:
+    def __init__(self, size=211):
+        self.size = size
+        self.buckets = [[] for _ in range(size)]
+    def _hash(self, key):
+        h = 5381
+        for ch in key.lower():
+            h = ((h << 5) + h) + ord(ch)
+        return h % self.size
+    def add(self, sym):
+        idx = self._hash(sym.name)
+        for s in self.buckets[idx]:
+            if s.name.lower() == sym.name.lower():
+                raise ValueError("duplicate identifier")
+        self.buckets[idx].append(sym)
+    def lookup(self, name):
+        idx = self._hash(name)
+        for s in self.buckets[idx]:
+            if s.name.lower() == name.lower():
+                return s
+        return None
+\end{lstlisting}
+
+\subsection*{А.3 Модуль interpreter.py (фрагмент)}
+\begin{lstlisting}[language=Python]
+def step(self):
+    ins = self.poliz[self.pc]
+    op = ins[0]
+    if op == Op.ADD:
+        b = self._pop(); a = self._pop(); self._push(a + b)
+    elif op == Op.JZ:
+        v = self._pop()
+        self.pc = ins[1] if not v else self.pc + 1
+        return self.finished
+    self.pc += 1
+    return self.finished
+\end{lstlisting}
+
+\end{document}

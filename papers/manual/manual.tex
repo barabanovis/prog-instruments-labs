@@ -1,0 +1,343 @@
+\documentclass[14pt,a4paper]{article}
+
+% --- Подключение общего стиля из родительской папки ---
+\makeatletter
+\def\input@path{{../}}
+\makeatother
+\usepackage{common}
+
+% --- Папка для картинок этого документа ---
+\graphicspath{{fig/}}
+
+\begin{document}
+
+% ===================== ТИТУЛЬНЫЙ ЛИСТ =====================
+\begin{titlepage}
+\begin{center}
+МИНИСТЕРСТВО НАУКИ И ВЫСШЕГО ОБРАЗОВАНИЯ РОССИЙСКОЙ ФЕДЕРАЦИИ\\
+ФЕДЕРАЛЬНОЕ ГОСУДАРСТВЕННОЕ АВТОНОМНОЕ ОБРАЗОВАТЕЛЬНОЕ УЧРЕЖДЕНИЕ\\
+ВЫСШЕГО ОБРАЗОВАНИЯ\\
+«САМАРСКИЙ НАЦИОНАЛЬНЫЙ ИССЛЕДОВАТЕЛЬСКИЙ УНИВЕРСИТЕТ\\
+ИМЕНИ АКАДЕМИКА С. П. КОРОЛЕВА»\\
+(Самарский университет)\\[12pt]
+Кафедра \underline{\hspace{6cm}}
+\end{center}
+
+\vfill
+
+\begin{center}
+РУКОВОДСТВО ПОЛЬЗОВАТЕЛЯ\\
+языка программирования \texttt{BasicLite}\\
+(вариант 3-2-1-A)
+\end{center}
+
+\vfill
+
+\begin{flushright}
+\begin{tabular}{l}
+Студент группы \underline{\hspace{2.5cm}} \\
+\underline{\hspace{5cm}} \\
+Руководитель \underline{\hspace{2.5cm}} \\
+\underline{\hspace{5cm}}
+\end{tabular}
+\end{flushright}
+
+\vfill
+
+\begin{center}
+Самара 2024
+\end{center}
+\end{titlepage}
+
+\structtitle{Содержание}
+\tableofcontents
+
+% ===================== ВВЕДЕНИЕ =====================
+\structtitle{Введение}
+
+\texttt{BasicLite} — упрощённый императивный язык с BASIC-подобным
+синтаксисом, строгой типизацией и циклом с постусловием. Язык
+предназначен для учебных целей и поддерживает редактирование,
+пошаговое выполнение и отладку.
+
+% ===================== 1 БАЗОВЫЙ СИНТАКСИС =====================
+\section{Базовый синтаксис}
+
+\subsection{Регистр}
+
+Ключевые слова не чувствительны к регистру: \texttt{PRINT},
+\texttt{print}, \texttt{Print} эквивалентны. Идентификаторы также
+не чувствительны к регистру (\texttt{X} и \texttt{x} — одна
+переменная).
+
+\subsection{Комментарии}
+
+Однострочный комментарий начинается с \texttt{'}:
+\begin{lstlisting}[language={},numbers=none]
+' это комментарий
+PRINT "hello"   ' и это тоже
+\end{lstlisting}
+
+\subsection{Разделители операторов}
+
+Операторы разделяются концом строки. Точка с запятой не используется.
+Пустые строки игнорируются.
+
+% ===================== 2 ТИПЫ ДАННЫХ =====================
+\section{Типы данных}
+
+Язык поддерживает три типа, перечисленные в таблице~\ref{tab:types}.
+
+\begin{table}[H]
+\caption{Типы данных языка}
+\label{tab:types}
+\centering
+\begin{tabular}{@{}lll@{}}
+\toprule
+Тип & Пример литерала & Описание \\
+\midrule
+INTEGER & \texttt{42}      & целое число \\
+REAL    & \texttt{3.14}    & вещественное число \\
+STRING  & \texttt{"hello"} & строка \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+Правила строгой типизации:
+\begin{itemize}
+  \item преобразование INTEGER $\to$ REAL разрешено;
+  \item преобразование REAL $\to$ INTEGER запрещено;
+  \item STRING не участвует в арифметике;
+  \item смешивать STRING и числа в одной операции нельзя.
+\end{itemize}
+
+% ===================== 3 ПЕРЕМЕННЫЕ =====================
+\section{Переменные}
+
+\subsection{Объявление}
+
+\begin{lstlisting}[language={},numbers=none]
+DIM x AS INTEGER
+DIM y AS REAL
+DIM s AS STRING
+DIM a, b AS INTEGER
+\end{lstlisting}
+
+\subsection{Присваивание}
+
+Оператор присваивания — \texttt{:=}:
+\begin{lstlisting}[language={},numbers=none]
+x := 10
+y := 3.5
+s := "hello"
+x := x + 1
+\end{lstlisting}
+
+% ===================== 4 ВЫРАЖЕНИЯ =====================
+\section{Выражения и операции}
+
+\subsection{Арифметические операции}
+
+\texttt{+}, \texttt{-}, \texttt{*}, \texttt{/}. Приоритет:
+\texttt{*}, \texttt{/} выше, чем \texttt{+}, \texttt{-}. Скобки
+\texttt{()} меняют порядок.
+
+\subsection{Операции сравнения}
+
+\texttt{>}, \texttt{<}, \texttt{>=}, \texttt{<=}, \texttt{=},
+\texttt{<>}. Результат — INTEGER (0 или 1).
+
+\subsection{Логические операции}
+
+\texttt{AND}, \texttt{OR}, \texttt{NOT}. Приоритет:
+\texttt{NOT} > \texttt{AND} > \texttt{OR}.
+
+\subsection{Пример}
+
+\begin{lstlisting}[language={},numbers=none]
+DIM a, b AS INTEGER
+a := (5 + 3) * 2
+b := 10 / 3          ' ошибка: / даёт REAL, нельзя в INTEGER
+\end{lstlisting}
+
+% ===================== 5 ВВОД-ВЫВОД =====================
+\section{Операторы ввода-вывода}
+
+\subsection{PRINT}
+
+\begin{lstlisting}[language={},numbers=none]
+PRINT "hello"
+PRINT x
+PRINT "x =", x, "y =", y
+PRINT
+\end{lstlisting}
+
+\subsection{INPUT}
+
+\begin{lstlisting}[language={},numbers=none]
+INPUT x
+INPUT a, b
+\end{lstlisting}
+
+% ===================== 6 УПРАВЛЯЮЩИЕ КОНСТРУКЦИИ =====================
+\section{Управляющие конструкции}
+
+\subsection{Условный оператор}
+
+\begin{lstlisting}[language={},numbers=none]
+IF x > 0 THEN
+    PRINT "positive"
+ELSE
+    PRINT "non-positive"
+ENDIF
+\end{lstlisting}
+
+\subsection{Цикл с постусловием}
+
+Тело выполняется хотя бы один раз; проверка — после тела.
+\begin{lstlisting}[language={},numbers=none]
+DO
+    PRINT i
+    i := i + 1
+LOOP WHILE i <= 10
+
+DO
+    PRINT i
+    i := i + 1
+LOOP UNTIL i > 10
+\end{lstlisting}
+
+\subsection{Цикл со счётчиком}
+
+\begin{lstlisting}[language={},numbers=none]
+FOR i = 1 TO 10
+    PRINT i
+NEXT
+
+FOR i = 10 TO 1 STEP -1
+    PRINT i
+NEXT
+\end{lstlisting}
+
+\subsection{Множественный выбор}
+
+\begin{lstlisting}[language={},numbers=none]
+SELECT CASE x
+CASE 1, 2, 3:
+    PRINT "small"
+CASE 4 TO 10:
+    PRINT "medium"
+CASE ELSE:
+    PRINT "large"
+ENDSELECT
+\end{lstlisting}
+
+\subsection{Безусловный переход}
+
+\begin{lstlisting}[language={},numbers=none]
+GOTO done
+PRINT "skipped"
+done:
+PRINT "end"
+\end{lstlisting}
+
+% ===================== 7 ФУНКЦИИ =====================
+\section{Функции}
+
+\subsection{Определение}
+
+\begin{lstlisting}[language={},numbers=none]
+FUNCTION square(x AS INTEGER) AS INTEGER
+    RETURN x * x
+ENDFUNCTION
+\end{lstlisting}
+
+\subsection{Вызов}
+
+\begin{lstlisting}[language={},numbers=none]
+DIM y AS INTEGER
+y := square(5)
+PRINT y
+CALL square(3)
+\end{lstlisting}
+
+% ===================== 8 ПРИМЕР =====================
+\section{Пример программы}
+
+\begin{lstlisting}[language={},numbers=none]
+' Сумма чисел от 1 до N
+DIM N, I, S AS INTEGER
+
+PRINT "Enter N:"
+INPUT N
+
+I := 1
+S := 0
+DO
+    S := S + I
+    I := I + 1
+LOOP WHILE I <= N
+
+PRINT "Sum =", S
+
+IF S > 100 THEN
+    PRINT "Large sum"
+ELSE
+    PRINT "Small sum"
+ENDIF
+\end{lstlisting}
+
+% ===================== 9 РАБОТА С ИНТЕРПРЕТАТОРОМ =====================
+\section{Работа с интерпретатором}
+
+\subsection{Запуск}
+
+Порядок запуска:
+\begin{enumerate}
+  \item запустить \texttt{python main.py};
+  \item нажать «Загрузить» и выбрать файл \texttt{.bas} либо набрать
+        программу в редакторе;
+  \item нажать «Запустить» для полного выполнения.
+\end{enumerate}
+
+% ФОТО: главное окно после запуска. Положите в manual/fig/run.png
+\begin{figure}[H]
+  \centering
+  \fbox{\parbox[c][7cm][c]{0.9\textwidth}{\centering
+    \textbf{[МЕСТО ДЛЯ ФОТО]}\\[4pt]
+    Главное окно после запуска программы}}
+  \caption{Запуск программы}
+  \label{fig:run}
+\end{figure}
+
+\subsection{Пошаговое выполнение}
+
+Кнопка «Шаг» выполняет одну инструкцию ПОЛИЗа и обновляет панель
+ПОЛИЗа (текущая инструкция подсвечена), таблицу переменных и стек
+(в строке статуса).
+
+% ФОТО: пошаговое выполнение. Положите в manual/fig/step.png
+\begin{figure}[H]
+  \centering
+  \fbox{\parbox[c][7cm][c]{0.9\textwidth}{\centering
+    \textbf{[МЕСТО ДЛЯ ФОТО]}\\[4pt]
+    Пошаговое выполнение: подсветка ПОЛИЗа, стек, переменные}}
+  \caption{Пошаговое выполнение}
+  \label{fig:step}
+\end{figure}
+
+\subsection{Точки останова}
+
+Порядок работы с точками останова:
+\begin{enumerate}
+  \item установить курсор на нужную инструкцию ПОЛИЗа;
+  \item нажать «Точка останова» — инструкция помечается;
+  \item нажать «Запустить» — выполнение остановится на этой
+        инструкции;
+  \item для продолжения — снова «Запустить» или «Шаг».
+\end{enumerate}
+
+% ФОТО: точка останова. Положите в manual/fig/bp.png
+\begin{figure}[H]
+  \centering
+  \fbox{\parbox[c][7cm][c]{0.9
